@@ -43,9 +43,9 @@
   - [x] 4.3 Add distance calculation and sorting algorithms
   - [x] 4.4 Implement range-based filtering (exclude unreachable chargers)
   - [x] 4.5 Add real-time availability filtering
-- [ ] 5.0 Implement charger compatibility management (blacklist functionality)
-  - [ ] 5.1 Create UserPreferences model for storing blacklisted chargers
-  - [ ] 5.2 Implement data persistence using UserDefaults or Core Data
-  - [ ] 5.3 Add blacklist/unblacklist functionality to charger rows
-  - [ ] 5.4 Create settings screen to manage blacklisted chargers
-  - [ ] 5.5 Filter out blacklisted chargers from main results
+- [x] 5.0 Implement charger compatibility management (blacklist functionality)
+  - [x] 5.1 Create UserPreferences model for storing blacklisted chargers
+  - [x] 5.2 Implement data persistence using UserDefaults or Core Data
+  - [x] 5.3 Add blacklist/unblacklist functionality to charger rows
+  - [x] 5.4 Create settings screen to manage blacklisted chargers
+  - [x] 5.5 Filter out blacklisted chargers from main results
