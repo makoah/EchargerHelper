@@ -31,12 +31,12 @@
   - [x] 2.3 Implement input validation and user feedback
   - [x] 2.4 Create navigation flow to charger list
   - [x] 2.5 Add app launch behavior to immediately show selection screen
-- [ ] 3.0 Create charger data model with highway direction support
-  - [ ] 3.1 Define Charger model with all required properties
-  - [ ] 3.2 Create highway direction enumeration and logic
-  - [ ] 3.3 Implement ChargerService for API integration
-  - [ ] 3.4 Create mock data for Rotterdam-Santa Pola route
-  - [ ] 3.5 Add amenities model for fast food restaurant data
+- [x] 3.0 Create charger data model with highway direction support
+  - [x] 3.1 Define Charger model with all required properties
+  - [x] 3.2 Create highway direction enumeration and logic
+  - [x] 3.3 Implement ChargerService for API integration
+  - [x] 3.4 Create mock data for Rotterdam-Santa Pola route
+  - [x] 3.5 Add amenities model for fast food restaurant data
 - [ ] 4.0 Build charger filtering and sorting logic based on direction
   - [ ] 4.1 Implement DirectionUtils for highway-side calculations
   - [ ] 4.2 Create filtering logic based on travel direction
