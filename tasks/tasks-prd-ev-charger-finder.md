@@ -37,12 +37,12 @@
   - [x] 3.3 Implement ChargerService for API integration
   - [x] 3.4 Create mock data for Rotterdam-Santa Pola route
   - [x] 3.5 Add amenities model for fast food restaurant data
-- [ ] 4.0 Build charger filtering and sorting logic based on direction
-  - [ ] 4.1 Implement DirectionUtils for highway-side calculations
-  - [ ] 4.2 Create filtering logic based on travel direction
-  - [ ] 4.3 Add distance calculation and sorting algorithms
-  - [ ] 4.4 Implement range-based filtering (exclude unreachable chargers)
-  - [ ] 4.5 Add real-time availability filtering
+- [x] 4.0 Build charger filtering and sorting logic based on direction
+  - [x] 4.1 Implement DirectionUtils for highway-side calculations
+  - [x] 4.2 Create filtering logic based on travel direction
+  - [x] 4.3 Add distance calculation and sorting algorithms
+  - [x] 4.4 Implement range-based filtering (exclude unreachable chargers)
+  - [x] 4.5 Add real-time availability filtering
 - [ ] 5.0 Implement charger compatibility management (blacklist functionality)
   - [ ] 5.1 Create UserPreferences model for storing blacklisted chargers
   - [ ] 5.2 Implement data persistence using UserDefaults or Core Data

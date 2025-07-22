@@ -1,56 +1,83 @@
 import Foundation
 import Combine
+import CoreLocation
 
 class ChargerService: ObservableObject {
-    @Published var chargers: [Charger] = []
+    @Published var chargerResults: [ChargerResult] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     
     private var cancellables = Set<AnyCancellable>()
+    private var userPreferences = UserPreferences()
     
     init() {
         loadMockData()
     }
     
-    func fetchChargers(for direction: TravelDirection, range: RemainingRange) {
+    func fetchChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D? = nil) {
         isLoading = true
         errorMessage = nil
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.chargers = self.filterChargers(for: direction, range: range)
+            let filteredChargers = self.filterChargers(for: direction, range: range, userLocation: userLocation)
+            self.chargerResults = filteredChargers
             self.isLoading = false
         }
     }
     
-    private func filterChargers(for direction: TravelDirection, range: RemainingRange) -> [Charger] {
-        let filteredChargers = mockChargers.filter { charger in
-            let highwayDirection = charger.highwayAccess.direction
-            let travelDirection = direction
-            
-            return highwayDirection.isCompatible(with: travelDirection) && 
-                   charger.powerRating >= 150 &&
-                   isWithinRange(charger, range: range)
+    private func filterChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D?) -> [ChargerResult] {
+        // Filter out blacklisted chargers
+        let availableChargers = mockChargers.filter { charger in
+            !userPreferences.isBlacklisted(charger.id)
         }
         
-        return filteredChargers.sorted { charger1, charger2 in
-            getDistanceToCharger(charger1) < getDistanceToCharger(charger2)
-        }
-    }
-    
-    private func isWithinRange(_ charger: Charger, range: RemainingRange) -> Bool {
-        let distanceToCharger = getDistanceToCharger(charger)
-        let rangeInKm = Double(range.rawValue)
-        let safetyBuffer = 0.8
+        // Use DistanceUtils to calculate optimal chargers
+        let chargerResults = DistanceUtils.calculateOptimalChargers(
+            chargers: availableChargers,
+            userDirection: direction,
+            userRange: range,
+            userLocation: userLocation
+        )
         
-        return distanceToCharger <= (rangeInKm * safetyBuffer)
+        // Apply additional filters
+        let filtered = DistanceUtils.filterByPowerRating(chargers: chargerResults, minimumPower: 150)
+        let withAvailability = DistanceUtils.filterByAvailability(chargers: filtered, includeUnknown: true)
+        
+        return withAvailability
     }
     
-    private func getDistanceToCharger(_ charger: Charger) -> Double {
-        return Double.random(in: 15...200)
+    func blacklistCharger(_ chargerId: UUID) {
+        userPreferences.blacklistCharger(chargerId)
+        // Remove from current results
+        chargerResults.removeAll { $0.charger.id == chargerId }
+    }
+    
+    func removeFromBlacklist(_ chargerId: UUID) {
+        userPreferences.removeFromBlacklist(chargerId)
+    }
+    
+    func isChargerBlacklisted(_ chargerId: UUID) -> Bool {
+        return userPreferences.isBlacklisted(chargerId)
+    }
+    
+    func refreshAvailability() {
+        isLoading = true
+        
+        // Simulate API call to refresh real-time availability
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // Randomly update availability for demo
+            for i in 0..<self.chargerResults.count {
+                if Bool.random() {
+                    let newStatus: AvailabilityStatus = Bool.random() ? .available : .occupied
+                    // Note: This is simplified - in reality we'd update the source data
+                }
+            }
+            self.isLoading = false
+        }
     }
     
     private func loadMockData() {
-        chargers = mockChargers
+        chargerResults = []
     }
 }
 
