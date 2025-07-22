@@ -25,12 +25,12 @@
   - [x] 1.3 Set up project folder structure and organize files
   - [x] 1.4 Add necessary dependencies (networking, data persistence)
   - [x] 1.5 Create basic app icon and launch screen
-- [ ] 2.0 Implement direction and range selection interface  
-  - [ ] 2.1 Create ContentView with direction selection buttons
-  - [ ] 2.2 Add range selection interface (80, 60, 40, 20 km options)
-  - [ ] 2.3 Implement input validation and user feedback
-  - [ ] 2.4 Create navigation flow to charger list
-  - [ ] 2.5 Add app launch behavior to immediately show selection screen
+- [x] 2.0 Implement direction and range selection interface  
+  - [x] 2.1 Create ContentView with direction selection buttons
+  - [x] 2.2 Add range selection interface (80, 60, 40, 20 km options)
+  - [x] 2.3 Implement input validation and user feedback
+  - [x] 2.4 Create navigation flow to charger list
+  - [x] 2.5 Add app launch behavior to immediately show selection screen
 - [ ] 3.0 Create charger data model with highway direction support
   - [ ] 3.1 Define Charger model with all required properties
   - [ ] 3.2 Create highway direction enumeration and logic

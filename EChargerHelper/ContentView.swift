@@ -4,6 +4,12 @@ struct ContentView: View {
     @State private var selectedDirection: TravelDirection?
     @State private var selectedRange: RemainingRange?
     @State private var showChargerList = false
+    @State private var showingAlert = false
+    @State private var alertMessage = ""
+    
+    private var isReadyToSearch: Bool {
+        selectedDirection != nil && selectedRange != nil
+    }
     
     var body: some View {
         NavigationView {
@@ -75,20 +81,37 @@ struct ContentView: View {
                     .padding(.horizontal)
                 }
                 
-                if selectedDirection != nil && selectedRange != nil {
-                    Button(action: {
+                Button(action: {
+                    if isReadyToSearch {
                         showChargerList = true
-                    }) {
-                        Text("Find Chargers")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                    } else {
+                        showValidationAlert()
                     }
-                    .padding(.horizontal)
-                    .padding(.top)
+                }) {
+                    Text("Find Chargers")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isReadyToSearch ? Color.blue : Color.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                .padding(.top)
+                .disabled(!isReadyToSearch && selectedDirection == nil)
+                
+                if selectedDirection != nil && selectedRange == nil {
+                    Text("Please select your remaining range")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                        .padding(.top, -20)
+                }
+                
+                if selectedDirection == nil {
+                    Text("Please select your travel direction first")
+                        .font(.caption)
+                        .foregroundColor(.orange)
+                        .padding(.top, -20)
                 }
                 
                 Spacer()
@@ -97,8 +120,24 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .sheet(isPresented: $showChargerList) {
-            ChargerListView(direction: selectedDirection!, range: selectedRange!)
+            if let direction = selectedDirection, let range = selectedRange {
+                ChargerListView(direction: direction, range: range)
+            }
         }
+        .alert("Input Required", isPresented: $showingAlert) {
+            Button("OK") { }
+        } message: {
+            Text(alertMessage)
+        }
+    }
+    
+    private func showValidationAlert() {
+        if selectedDirection == nil {
+            alertMessage = "Please select your travel direction first."
+        } else if selectedRange == nil {
+            alertMessage = "Please select your remaining range."
+        }
+        showingAlert = true
     }
 }
 
