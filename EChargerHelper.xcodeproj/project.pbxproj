@@ -10,6 +10,14 @@
 		AA000001 /* EChargerHelperApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002 /* EChargerHelperApp.swift */; };
 		AA000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004 /* ContentView.swift */; };
 		AA000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA000006 /* Assets.xcassets */; };
+		AA000031 /* Charger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000030 /* Charger.swift */; };
+		AA000033 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000032 /* UserPreferences.swift */; };
+		AA000035 /* ChargerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000034 /* ChargerService.swift */; };
+		AA000037 /* DirectionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000036 /* DirectionUtils.swift */; };
+		AA000039 /* DistanceUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000038 /* DistanceUtils.swift */; };
+		AA000041 /* ChargerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000040 /* ChargerListView.swift */; };
+		AA000043 /* ChargerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000042 /* ChargerRowView.swift */; };
+		AA000045 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000044 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +25,14 @@
 		AA000002 /* EChargerHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EChargerHelperApp.swift; sourceTree = "<group>"; };
 		AA000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA000030 /* Charger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charger.swift; sourceTree = "<group>"; };
+		AA000032 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
+		AA000034 /* ChargerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerService.swift; sourceTree = "<group>"; };
+		AA000036 /* DirectionUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionUtils.swift; sourceTree = "<group>"; };
+		AA000038 /* DistanceUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUtils.swift; sourceTree = "<group>"; };
+		AA000040 /* ChargerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerListView.swift; sourceTree = "<group>"; };
+		AA000042 /* ChargerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerRowView.swift; sourceTree = "<group>"; };
+		AA000044 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +46,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA000020 /* */ = {
+			isa = PBXGroup;
+			children = (
+				AA000009 /* EChargerHelper */,
+				AA000021 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA000021 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA000007 /* EChargerHelper.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		AA000009 /* EChargerHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -47,6 +79,9 @@
 		AA000010 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AA000040 /* ChargerListView.swift */,
+				AA000042 /* ChargerRowView.swift */,
+				AA000044 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -54,6 +89,8 @@
 		AA000011 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AA000030 /* Charger.swift */,
+				AA000032 /* UserPreferences.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -61,6 +98,7 @@
 		AA000012 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				AA000034 /* ChargerService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -68,6 +106,8 @@
 		AA000013 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AA000036 /* DirectionUtils.swift */,
+				AA000038 /* DistanceUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -143,6 +183,14 @@
 			files = (
 				AA000003 /* ContentView.swift in Sources */,
 				AA000001 /* EChargerHelperApp.swift in Sources */,
+				AA000031 /* Charger.swift in Sources */,
+				AA000033 /* UserPreferences.swift in Sources */,
+				AA000035 /* ChargerService.swift in Sources */,
+				AA000037 /* DirectionUtils.swift in Sources */,
+				AA000039 /* DistanceUtils.swift in Sources */,
+				AA000041 /* ChargerListView.swift in Sources */,
+				AA000043 /* ChargerRowView.swift in Sources */,
+				AA000045 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

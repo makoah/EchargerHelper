@@ -162,18 +162,6 @@ enum RemainingRange: Int, CaseIterable {
     case twenty = 20
 }
 
-struct ChargerListView: View {
-    let direction: TravelDirection
-    let range: RemainingRange
-    
-    var body: some View {
-        NavigationView {
-            Text("Charger list for \(direction.displayName) with \(range.rawValue)km range")
-                .navigationTitle("Available Chargers")
-                .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
 
 #Preview {
     ContentView()

@@ -175,6 +175,7 @@ struct ChargerRowView: View {
 
 struct ChargerDetailView: View {
     let charger: Charger
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
@@ -251,7 +252,7 @@ struct ChargerDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        // Dismiss sheet
+                        dismiss()
                     }
                 }
             }
