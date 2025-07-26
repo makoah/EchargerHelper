@@ -18,6 +18,10 @@
 		AA000041 /* ChargerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000040 /* ChargerListView.swift */; };
 		AA000043 /* ChargerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000042 /* ChargerRowView.swift */; };
 		AA000045 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000044 /* SettingsView.swift */; };
+		AA000047 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000046 /* LocationManager.swift */; };
+		AA000049 /* RealChargerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000048 /* RealChargerService.swift */; };
+		AA000051 /* OpenChargeMapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000050 /* OpenChargeMapModels.swift */; };
+		AA000053 /* ChargerServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000052 /* ChargerServiceProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +37,10 @@
 		AA000040 /* ChargerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerListView.swift; sourceTree = "<group>"; };
 		AA000042 /* ChargerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerRowView.swift; sourceTree = "<group>"; };
 		AA000044 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA000046 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		AA000048 /* RealChargerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealChargerService.swift; sourceTree = "<group>"; };
+		AA000050 /* OpenChargeMapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenChargeMapModels.swift; sourceTree = "<group>"; };
+		AA000052 /* ChargerServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerServiceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +99,7 @@
 			children = (
 				AA000030 /* Charger.swift */,
 				AA000032 /* UserPreferences.swift */,
+				AA000050 /* OpenChargeMapModels.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -99,6 +108,9 @@
 			isa = PBXGroup;
 			children = (
 				AA000034 /* ChargerService.swift */,
+				AA000048 /* RealChargerService.swift */,
+				AA000046 /* LocationManager.swift */,
+				AA000052 /* ChargerServiceProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -191,6 +203,10 @@
 				AA000041 /* ChargerListView.swift in Sources */,
 				AA000043 /* ChargerRowView.swift in Sources */,
 				AA000045 /* SettingsView.swift in Sources */,
+				AA000047 /* LocationManager.swift in Sources */,
+				AA000049 /* RealChargerService.swift in Sources */,
+				AA000051 /* OpenChargeMapModels.swift in Sources */,
+				AA000053 /* ChargerServiceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

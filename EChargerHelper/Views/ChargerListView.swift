@@ -6,16 +6,19 @@ struct ChargerListView: View {
     let range: RemainingRange
     
     @StateObject private var chargerService = ChargerService()
+    @StateObject private var realChargerService = RealChargerService()
+    @StateObject private var locationManager = LocationManager()
     @State private var showingSettings = false
+    @State private var useRealData = false
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
             VStack {
-                if chargerService.isLoading {
+                if currentService.isLoading {
                     ProgressView("Finding chargers...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if chargerService.chargerResults.isEmpty {
+                } else if currentService.chargerResults.isEmpty {
                     VStack(spacing: 20) {
                         Image(systemName: "bolt.slash")
                             .font(.system(size: 60))
@@ -39,7 +42,7 @@ struct ChargerListView: View {
                 } else {
                     List {
                         Section {
-                            ForEach(chargerService.chargerResults) { result in
+                            ForEach(currentService.chargerResults) { result in
                                 ChargerRowView(
                                     chargerResult: result,
                                     onBlacklistToggle: { chargerId in
@@ -58,14 +61,18 @@ struct ChargerListView: View {
                                 
                                 Spacer()
                                 
-                                Text("\(chargerService.chargerResults.count) charger\(chargerService.chargerResults.count == 1 ? "" : "s")")
+                                Text("\(currentService.chargerResults.count) charger\(currentService.chargerResults.count == 1 ? "" : "s")")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
                         }
                     }
                     .refreshable {
-                        chargerService.refreshAvailability()
+                        if useRealData {
+                            realChargerService.fetchRealChargers(for: direction, range: range)
+                        } else {
+                            chargerService.refreshAvailability()
+                        }
                     }
                 }
             }
@@ -80,6 +87,13 @@ struct ChargerListView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
+                        Button(useRealData ? "Real" : "Mock") {
+                            useRealData.toggle()
+                            fetchChargers()
+                        }
+                        .font(.caption)
+                        .foregroundColor(useRealData ? .green : .orange)
+                        
                         Button("Refresh") {
                             fetchChargers()
                         }
@@ -101,8 +115,16 @@ struct ChargerListView: View {
         }
     }
     
+    private var currentService: any ChargerServiceProtocol {
+        useRealData ? realChargerService : chargerService
+    }
+    
     private func fetchChargers() {
-        chargerService.fetchChargers(for: direction, range: range)
+        if useRealData {
+            realChargerService.fetchRealChargers(for: direction, range: range)
+        } else {
+            chargerService.fetchChargers(for: direction, range: range)
+        }
     }
     
     private func toggleBlacklist(_ chargerId: UUID) {

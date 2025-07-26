@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import CoreLocation
 
-class ChargerService: ObservableObject {
+class ChargerService: ChargerServiceProtocol {
     @Published var chargerResults: [ChargerResult] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
