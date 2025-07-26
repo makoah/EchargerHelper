@@ -10,25 +10,33 @@ class RealChargerService: ChargerServiceProtocol {
     private let locationManager = LocationManager()
     private let openChargeMapService = OpenChargeMapService()
     private var cancellables = Set<AnyCancellable>()
+    private var userPreferences = UserPreferences()
     
-    func fetchRealChargers(for direction: TravelDirection, range: RemainingRange) {
+    func fetchChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D? = nil) {
         isLoading = true
         errorMessage = nil
         
-        // First get current location
-        locationManager.requestLocation()
-        
-        // Wait for location update
-        locationManager.$location
-            .compactMap { $0 }
-            .first()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] location in
-                Task {
-                    await self?.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
-                }
+        if let userLocation = userLocation {
+            // Use provided location
+            Task {
+                await loadChargersFromAPI(location: userLocation, direction: direction, range: range)
             }
-            .store(in: &cancellables)
+        } else {
+            // Get current location from GPS
+            locationManager.requestLocation()
+            
+            // Wait for location update
+            locationManager.$location
+                .compactMap { $0 }
+                .first()
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] location in
+                    Task {
+                        await self?.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
+                    }
+                }
+                .store(in: &cancellables)
+        }
     }
     
     @MainActor
@@ -198,6 +206,32 @@ class RealChargerService: ChargerServiceProtocol {
             
             group.cancelAll()
             return result
+        }
+    }
+    
+    // MARK: - Blacklist Methods
+    func blacklistCharger(_ chargerId: UUID) {
+        userPreferences.blacklistCharger(chargerId)
+        // Remove from current results
+        chargerResults.removeAll { $0.charger.id == chargerId }
+    }
+    
+    func removeFromBlacklist(_ chargerId: UUID) {
+        userPreferences.removeFromBlacklist(chargerId)
+    }
+    
+    func isChargerBlacklisted(_ chargerId: UUID) -> Bool {
+        return userPreferences.isBlacklisted(chargerId)
+    }
+    
+    func refreshAvailability() {
+        isLoading = true
+        
+        // Simulate API call to refresh real-time availability
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            // In a real app, this would update availability from API
+            // For now, just complete the loading state
+            self.isLoading = false
         }
     }
 }
