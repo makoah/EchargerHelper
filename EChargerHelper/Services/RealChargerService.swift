@@ -265,10 +265,10 @@ struct OpenChargeMapService {
     private func createChargerAtLocation(_ location: CLLocationCoordinate2D) -> Charger {
         // Create realistic charger data for the location
         let operators = ["Ionity", "Fastned", "Tesla", "ChargePoint", "Electromaps"]
-        let operator = operators.randomElement()!
+        let operatorName = operators.randomElement()!
         
         return Charger(
-            name: "\(operator) \(getCityName(for: location))",
+            name: "\(operatorName) \(getCityName(for: location))",
             location: ChargerLocation(
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -298,10 +298,10 @@ struct OpenChargeMapService {
                 requiresCrossing: false
             ),
             operatorInfo: ChargerOperatorInfo(
-                name: operator,
-                network: operator,
+                name: operatorName,
+                network: operatorName,
                 supportPhone: "+33123456789",
-                appName: "\(operator) App"
+                appName: "\(operatorName) App"
             ),
             pricing: PricingInfo(
                 pricePerKwh: Double.random(in: 0.35...0.79),

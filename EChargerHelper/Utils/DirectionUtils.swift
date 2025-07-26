@@ -11,6 +11,14 @@ struct DirectionUtils {
         return distanceInMeters / 1000.0 // Convert to kilometers
     }
     
+    static func calculateDistance(from userLocation: CLLocationCoordinate2D, to chargerCoordinate: CLLocationCoordinate2D) -> Double {
+        let userCLLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        let chargerCLLocation = CLLocation(latitude: chargerCoordinate.latitude, longitude: chargerCoordinate.longitude)
+        
+        let distanceInMeters = userCLLocation.distance(from: chargerCLLocation)
+        return distanceInMeters / 1000.0 // Convert to kilometers
+    }
+    
     static func isChargerAhead(charger: Charger, for direction: TravelDirection, from userLocation: CLLocationCoordinate2D) -> Bool {
         let chargerLat = charger.location.latitude
         let userLat = userLocation.latitude
