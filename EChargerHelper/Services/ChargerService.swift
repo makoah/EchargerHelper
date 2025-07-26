@@ -65,13 +65,8 @@ class ChargerService: ObservableObject {
         
         // Simulate API call to refresh real-time availability
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            // Randomly update availability for demo
-            for i in 0..<self.chargerResults.count {
-                if Bool.random() {
-                    let newStatus: AvailabilityStatus = Bool.random() ? .available : .occupied
-                    // Note: This is simplified - in reality we'd update the source data
-                }
-            }
+            // In a real app, this would update availability from API
+            // For now, just complete the loading state
             self.isLoading = false
         }
     }
