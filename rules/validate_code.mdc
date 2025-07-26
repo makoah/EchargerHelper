@@ -1,0 +1,102 @@
+---
+description: Code Quality Validation Rule
+globs: 
+alwaysApply: false
+---
+# Rule: Code Quality and Syntax Validation
+
+## Goal
+
+To ensure all code changes are validated for basic syntax errors, type conflicts, and Swift language compliance before the user tests them. This prevents wasting the user's time with easily catchable compilation errors.
+
+## Validation Process
+
+When writing or modifying Swift code, the AI must perform these validation steps:
+
+### 1. Swift Syntax Validation
+- **Reserved Keywords:** Check for Swift reserved words used as identifiers (`operator`, `class`, `func`, etc.)
+- **Function Signatures:** Verify all function calls match their definitions with correct parameter labels
+- **Type Compatibility:** Ensure all types are properly defined and compatible
+- **Import Statements:** Verify all required imports are present
+
+### 2. Type System Validation
+- **Enum/Struct Conflicts:** Check for naming conflicts between custom types and system types
+- **Protocol Conformance:** Verify all protocol implementations are complete
+- **Generic Constraints:** Ensure generic type parameters are properly constrained
+- **Optional Handling:** Check for proper optional unwrapping and nil safety
+
+### 3. iOS/Swift Specific Validation
+- **Framework Usage:** Verify correct usage of UIKit, SwiftUI, Foundation, etc.
+- **Memory Management:** Check for potential retain cycles and memory leaks
+- **Threading:** Ensure proper main thread usage for UI updates
+- **API Availability:** Check for proper @available annotations when needed
+
+### 4. Project Structure Validation
+- **File Organization:** Ensure files are in correct directories and properly organized
+- **Xcode Project:** Verify all new files are added to the Xcode project file
+- **Import Dependencies:** Check that all external dependencies are properly declared
+
+## Validation Checklist
+
+Before committing any Swift code changes, run through this checklist:
+
+- [ ] **Keywords Check:** No Swift reserved keywords used as identifiers
+- [ ] **Function Calls:** All function calls have matching signatures and parameter labels
+- [ ] **Type Definitions:** All custom types are properly defined and don't conflict
+- [ ] **Protocol Conformance:** All protocol requirements are implemented
+- [ ] **Import Statements:** All required frameworks are imported
+- [ ] **File References:** New files are added to Xcode project file
+- [ ] **Compilation Logic:** Code follows Swift compilation rules
+- [ ] **API Usage:** Framework APIs are used correctly
+
+## Common Issues to Catch
+
+### Swift Language Issues
+- Using reserved keywords as identifiers
+- Missing argument labels in function calls
+- Type name conflicts between custom and system types
+- Incorrect protocol conformance syntax
+- Missing required imports
+
+### iOS Development Issues
+- UI updates not on main thread
+- Missing @Published for ObservableObject properties
+- Incorrect SwiftUI syntax and modifiers
+- Missing Info.plist entries for permissions
+- Incorrect asset catalog structure
+
+### Project Structure Issues
+- Swift files not added to Xcode project
+- Files in wrong directories
+- Missing dependencies in Package.swift
+- Incorrect bundle identifiers
+
+## Implementation
+
+1. **Before Writing Code:** Review existing code structure and patterns
+2. **During Writing:** Follow established patterns and naming conventions
+3. **After Writing:** Run through validation checklist
+4. **Before Committing:** Perform final syntax and structure review
+
+## Tools for Validation
+
+- **Grep Tool:** Search for potential issues across codebase
+- **Read Tool:** Review file contents for syntax compliance
+- **Pattern Analysis:** Check for common Swift anti-patterns
+- **Type Checking:** Verify type definitions and usage
+
+## Error Prevention Strategy
+
+1. **Start Simple:** Begin with basic implementations that compile
+2. **Incremental Changes:** Make small, testable changes
+3. **Pattern Following:** Copy existing working patterns
+4. **Early Validation:** Check syntax before complex implementations
+5. **User Testing Readiness:** Only present code that should compile successfully
+
+## Success Criteria
+
+- Code compiles without syntax errors on first user test
+- No reserved keyword conflicts
+- All function calls have proper signatures
+- Types are correctly defined and used
+- Project structure is maintained properly
