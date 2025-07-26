@@ -146,7 +146,7 @@ struct OpenChargeMapService {
         let maxPower = poi.Connections?.compactMap { $0.PowerKW }.max() ?? 50
         
         // Determine availability
-        let availability: AvailabilityStatus
+        let availability: ChargerAvailabilityStatus
         if let statusType = poi.StatusType {
             switch statusType.ID {
             case 50: availability = .available
@@ -159,7 +159,7 @@ struct OpenChargeMapService {
         }
         
         // Get connector types
-        let connectors = poi.Connections?.compactMap { connection -> ConnectorType? in
+        let connectors = poi.Connections?.compactMap { connection -> ChargerConnectorType? in
             guard let connectionTypeID = connection.ConnectionType?.ID else { return nil }
             switch connectionTypeID {
             case 25, 1036: return .ccs2
@@ -200,7 +200,7 @@ struct OpenChargeMapService {
                 distanceFromHighway: Int.random(in: 100...1000),
                 requiresCrossing: false
             ),
-            operatorInfo: OperatorInfo(
+            operatorInfo: ChargerOperatorInfo(
                 name: poi.OperatorInfo?.Title ?? "Unknown Operator",
                 network: poi.DataProvider?.Title ?? "Unknown Network",
                 supportPhone: poi.OperatorInfo?.PhonePrimaryContact,
@@ -297,7 +297,7 @@ struct OpenChargeMapService {
                 distanceFromHighway: Int.random(in: 100...500),
                 requiresCrossing: false
             ),
-            operatorInfo: OperatorInfo(
+            operatorInfo: ChargerOperatorInfo(
                 name: operator,
                 network: operator,
                 supportPhone: "+33123456789",

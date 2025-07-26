@@ -123,7 +123,7 @@ private let mockChargers: [Charger] = [
             distanceFromHighway: 200,
             requiresCrossing: false
         ),
-        operatorInfo: OperatorInfo(
+        operatorInfo: ChargerOperatorInfo(
             name: "Ionity",
             network: "Ionity",
             supportPhone: "+33123456789",
@@ -168,7 +168,7 @@ private let mockChargers: [Charger] = [
             distanceFromHighway: 500,
             requiresCrossing: false
         ),
-        operatorInfo: OperatorInfo(
+        operatorInfo: ChargerOperatorInfo(
             name: "Fastned",
             network: "Fastned",
             supportPhone: "+31201234567",
@@ -213,7 +213,7 @@ private let mockChargers: [Charger] = [
             distanceFromHighway: 100,
             requiresCrossing: false
         ),
-        operatorInfo: OperatorInfo(
+        operatorInfo: ChargerOperatorInfo(
             name: "Electromaps",
             network: "Electromaps",
             supportPhone: "+34912345678",

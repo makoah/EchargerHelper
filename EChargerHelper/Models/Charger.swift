@@ -5,16 +5,16 @@ struct Charger: Identifiable, Codable {
     let name: String
     let location: ChargerLocation
     let powerRating: Int
-    let connectorTypes: [ConnectorType]
-    let availability: AvailabilityStatus
+    let connectorTypes: [ChargerConnectorType]
+    let availability: ChargerAvailabilityStatus
     let amenities: ChargerAmenities
     let highwayAccess: HighwayAccess
-    let operatorInfo: OperatorInfo
+    let operatorInfo: ChargerOperatorInfo
     let pricing: PricingInfo?
     let userRating: Double?
     let lastUpdated: Date
     
-    init(id: UUID = UUID(), name: String, location: ChargerLocation, powerRating: Int, connectorTypes: [ConnectorType], availability: AvailabilityStatus, amenities: ChargerAmenities, highwayAccess: HighwayAccess, operatorInfo: OperatorInfo, pricing: PricingInfo? = nil, userRating: Double? = nil, lastUpdated: Date = Date()) {
+    init(id: UUID = UUID(), name: String, location: ChargerLocation, powerRating: Int, connectorTypes: [ChargerConnectorType], availability: ChargerAvailabilityStatus, amenities: ChargerAmenities, highwayAccess: HighwayAccess, operatorInfo: ChargerOperatorInfo, pricing: PricingInfo? = nil, userRating: Double? = nil, lastUpdated: Date = Date()) {
         self.id = id
         self.name = name
         self.location = location
@@ -58,7 +58,7 @@ struct HighwayAccess: Codable {
     let requiresCrossing: Bool
 }
 
-struct OperatorInfo: Codable {
+struct ChargerOperatorInfo: Codable {
     let name: String
     let network: String
     let supportPhone: String?
@@ -72,7 +72,7 @@ struct PricingInfo: Codable {
     let currency: String
 }
 
-enum ConnectorType: String, CaseIterable, Codable {
+enum ChargerConnectorType: String, CaseIterable, Codable {
     case ccs2 = "CCS2"
     case chademo = "CHAdeMO"
     case type2 = "Type2"
@@ -92,7 +92,7 @@ enum ConnectorType: String, CaseIterable, Codable {
     }
 }
 
-enum AvailabilityStatus: String, CaseIterable, Codable {
+enum ChargerAvailabilityStatus: String, CaseIterable, Codable {
     case available = "available"
     case occupied = "occupied"
     case outOfOrder = "out_of_order"
