@@ -7,6 +7,7 @@ struct ChargerListView: View {
     
     @StateObject private var chargerService = ChargerService()
     @State private var showingSettings = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
@@ -71,17 +72,23 @@ struct ChargerListView: View {
             .navigationTitle("Available Chargers")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        showingSettings = true
-                    }) {
-                        Image(systemName: "gearshape")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
                 
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Refresh") {
-                        fetchChargers()
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack {
+                        Button("Refresh") {
+                            fetchChargers()
+                        }
+                        
+                        Button(action: {
+                            showingSettings = true
+                        }) {
+                            Image(systemName: "gearshape")
+                        }
                     }
                 }
             }
