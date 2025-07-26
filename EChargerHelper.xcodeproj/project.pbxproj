@@ -15,32 +15,32 @@
 		AA000035 /* ChargerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000034 /* ChargerService.swift */; };
 		AA000037 /* DirectionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000036 /* DirectionUtils.swift */; };
 		AA000039 /* DistanceUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000038 /* DistanceUtils.swift */; };
-		AA000041 /* ChargerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000040 /* ChargerListView.swift */; };
 		AA000043 /* ChargerRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000042 /* ChargerRowView.swift */; };
 		AA000045 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000044 /* SettingsView.swift */; };
 		AA000047 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000046 /* LocationManager.swift */; };
 		AA000049 /* RealChargerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000048 /* RealChargerService.swift */; };
 		AA000051 /* OpenChargeMapModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000050 /* OpenChargeMapModels.swift */; };
 		AA000053 /* ChargerServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000052 /* ChargerServiceProtocol.swift */; };
+		AA000055 /* SimpleChargerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000054 /* SimpleChargerListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AA000007 /* EChargerHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EChargerHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000002 /* EChargerHelperApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EChargerHelperApp.swift; sourceTree = "<group>"; };
 		AA000004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA000006 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AA000007 /* EChargerHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EChargerHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA000030 /* Charger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Charger.swift; sourceTree = "<group>"; };
 		AA000032 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		AA000034 /* ChargerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerService.swift; sourceTree = "<group>"; };
 		AA000036 /* DirectionUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionUtils.swift; sourceTree = "<group>"; };
 		AA000038 /* DistanceUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistanceUtils.swift; sourceTree = "<group>"; };
-		AA000040 /* ChargerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerListView.swift; sourceTree = "<group>"; };
 		AA000042 /* ChargerRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerRowView.swift; sourceTree = "<group>"; };
 		AA000044 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AA000046 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		AA000048 /* RealChargerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealChargerService.swift; sourceTree = "<group>"; };
 		AA000050 /* OpenChargeMapModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenChargeMapModels.swift; sourceTree = "<group>"; };
 		AA000052 /* ChargerServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerServiceProtocol.swift; sourceTree = "<group>"; };
+		AA000054 /* SimpleChargerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleChargerListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,22 +54,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AA000020 /* */ = {
-			isa = PBXGroup;
-			children = (
-				AA000009 /* EChargerHelper */,
-				AA000021 /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		AA000021 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				AA000007 /* EChargerHelper.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		AA000009 /* EChargerHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -87,9 +71,9 @@
 		AA000010 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AA000040 /* ChargerListView.swift */,
 				AA000042 /* ChargerRowView.swift */,
 				AA000044 /* SettingsView.swift */,
+				AA000054 /* SimpleChargerListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -122,6 +106,22 @@
 				AA000038 /* DistanceUtils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		AA000020 = {
+			isa = PBXGroup;
+			children = (
+				AA000009 /* EChargerHelper */,
+				AA000021 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AA000021 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA000007 /* EChargerHelper.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,13 +200,13 @@
 				AA000035 /* ChargerService.swift in Sources */,
 				AA000037 /* DirectionUtils.swift in Sources */,
 				AA000039 /* DistanceUtils.swift in Sources */,
-				AA000041 /* ChargerListView.swift in Sources */,
 				AA000043 /* ChargerRowView.swift in Sources */,
 				AA000045 /* SettingsView.swift in Sources */,
 				AA000047 /* LocationManager.swift in Sources */,
 				AA000049 /* RealChargerService.swift in Sources */,
 				AA000051 /* OpenChargeMapModels.swift in Sources */,
 				AA000053 /* ChargerServiceProtocol.swift in Sources */,
+				AA000055 /* SimpleChargerListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

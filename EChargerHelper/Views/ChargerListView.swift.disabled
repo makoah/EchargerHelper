@@ -6,10 +6,10 @@ struct ChargerListView: View {
     let range: RemainingRange
     
     @StateObject private var chargerService = ChargerService()
-    @StateObject private var realChargerService = RealChargerService()
-    @StateObject private var locationManager = LocationManager()
+    // @StateObject private var realChargerService = RealChargerService() // Disabled
+    // @StateObject private var locationManager = LocationManager() // Disabled
     @State private var showingSettings = false
-    @State private var useRealData = false
+    @State private var useRealData = false // Temporarily disabled
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -87,12 +87,12 @@ struct ChargerListView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     HStack {
-                        Button(useRealData ? "Real" : "Mock") {
-                            useRealData.toggle()
-                            fetchChargers()
+                        Button("Mock") {
+                            // Real mode temporarily disabled
                         }
                         .font(.caption)
-                        .foregroundColor(useRealData ? .green : .orange)
+                        .foregroundColor(.orange)
+                        .disabled(true)
                         
                         Button("Refresh") {
                             fetchChargers()
@@ -116,15 +116,12 @@ struct ChargerListView: View {
     }
     
     private var currentService: any ChargerServiceProtocol {
-        useRealData ? realChargerService : chargerService
+        chargerService // Always use mock service for now
     }
     
     private func fetchChargers() {
-        if useRealData {
-            realChargerService.fetchRealChargers(for: direction, range: range)
-        } else {
-            chargerService.fetchChargers(for: direction, range: range)
-        }
+        // Always use mock service for now
+        chargerService.fetchChargers(for: direction, range: range)
     }
     
     private func toggleBlacklist(_ chargerId: UUID) {

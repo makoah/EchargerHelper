@@ -121,7 +121,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showChargerList) {
             if let direction = selectedDirection, let range = selectedRange {
-                ChargerListView(direction: direction, range: range)
+                SimpleChargerListView(direction: direction, range: range)
             }
         }
         .alert("Input Required", isPresented: $showingAlert) {
