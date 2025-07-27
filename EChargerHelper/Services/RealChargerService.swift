@@ -25,14 +25,26 @@ class RealChargerService: ChargerServiceProtocol {
             // Get current location from GPS
             locationManager.requestLocation()
             
-            // Wait for location update
-            locationManager.$location
-                .compactMap { $0 }
-                .first()
+            // Set up timeout for location
+            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+                guard let self = self, self.isLoading else { return }
+                self.errorMessage = "Location timeout - please enable location services in Settings"
+                self.isLoading = false
+            }
+            
+            // Wait for location update or error
+            Publishers.CombineLatest(locationManager.$location, locationManager.$errorMessage)
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] location in
-                    Task {
-                        await self?.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
+                .sink { [weak self] location, locationError in
+                    guard let self = self else { return }
+                    
+                    if let locationError = locationError {
+                        self.errorMessage = "Location error: \(locationError)"
+                        self.isLoading = false
+                    } else if let location = location {
+                        Task {
+                            await self.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
+                        }
                     }
                 }
                 .store(in: &cancellables)

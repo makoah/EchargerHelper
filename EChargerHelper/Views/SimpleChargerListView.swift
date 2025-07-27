@@ -16,8 +16,11 @@ struct SimpleChargerListView: View {
                     VStack {
                         ProgressView()
                             .padding()
-                        Text("Finding chargers...")
+                        Text("Getting your location...")
                             .font(.headline)
+                        Text("Finding nearby chargers...")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 } else if chargerService.chargerResults.isEmpty {
                     VStack {
@@ -30,6 +33,7 @@ struct SimpleChargerListView: View {
                                 .font(.caption)
                                 .foregroundColor(.red)
                                 .padding()
+                                .multilineTextAlignment(.center)
                         }
                         
                         Text("Direction: \(direction == .rotterdamToSantaPola ? "Rotterdam → Santa Pola" : "Santa Pola → Rotterdam")")
@@ -76,9 +80,8 @@ struct SimpleChargerListView: View {
                 }
             }
             .onAppear {
-                // Test with Rotterdam coordinates for now
-                let testLocation = CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792)
-                chargerService.fetchChargers(for: direction, range: range, userLocation: testLocation)
+                // Use GPS location instead of fixed coordinates
+                chargerService.fetchChargers(for: direction, range: range, userLocation: nil)
             }
         }
     }
