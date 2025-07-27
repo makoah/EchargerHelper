@@ -1,11 +1,13 @@
 import SwiftUI
+import CoreLocation
 
 struct SimpleChargerListView: View {
     let direction: TravelDirection
     let range: RemainingRange
     
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var chargerService = ChargerService()
+    @StateObject private var chargerService = RealChargerService()
+    @State private var debugMessage = ""
     
     var body: some View {
         NavigationView {
@@ -23,6 +25,13 @@ struct SimpleChargerListView: View {
                             .font(.headline)
                             .padding()
                         
+                        if let errorMessage = chargerService.errorMessage {
+                            Text("Error: \(errorMessage)")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .padding()
+                        }
+                        
                         Text("Direction: \(direction == .rotterdamToSantaPola ? "Rotterdam → Santa Pola" : "Santa Pola → Rotterdam")")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
@@ -30,6 +39,24 @@ struct SimpleChargerListView: View {
                         Text("Range: \(range.rawValue) km")
                             .font(.subheadline)
                             .foregroundColor(.secondary)
+                        
+                        Button("Test API") {
+                            Task {
+                                if let realService = chargerService as? RealChargerService {
+                                    let result = await realService.testAPIConnectivity()
+                                    debugMessage = result
+                                }
+                            }
+                        }
+                        .buttonStyle(.bordered)
+                        .padding()
+                        
+                        if !debugMessage.isEmpty {
+                            Text("Debug: \(debugMessage)")
+                                .font(.caption)
+                                .foregroundColor(.blue)
+                                .padding()
+                        }
                     }
                 } else {
                     List(chargerService.chargerResults, id: \.charger.id) { result in
@@ -49,7 +76,9 @@ struct SimpleChargerListView: View {
                 }
             }
             .onAppear {
-                chargerService.fetchChargers(for: direction, range: range)
+                // Test with Rotterdam coordinates for now
+                let testLocation = CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792)
+                chargerService.fetchChargers(for: direction, range: range, userLocation: testLocation)
             }
         }
     }
