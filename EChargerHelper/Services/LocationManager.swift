@@ -51,16 +51,21 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("📍 Location authorization changed to: \(status.rawValue)")
         authorizationStatus = status
         
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
+            print("✅ Location authorized, requesting location...")
             requestLocation()
         case .denied, .restricted:
+            print("❌ Location access denied")
             errorMessage = "Location access denied. Please enable in Settings."
         case .notDetermined:
+            print("❓ Location not determined, requesting authorization...")
             locationManager.requestWhenInUseAuthorization()
         @unknown default:
+            print("🤷 Unknown location authorization status")
             break
         }
     }

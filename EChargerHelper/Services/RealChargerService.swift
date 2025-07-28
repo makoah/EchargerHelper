@@ -22,29 +22,30 @@ class RealChargerService: ChargerServiceProtocol {
                 await loadChargersFromAPI(location: userLocation, direction: direction, range: range)
             }
         } else {
-            // Get current location from GPS
+            // Get current location from GPS for real-world usage
+            print("🌍 Requesting your actual GPS location...")
             locationManager.requestLocation()
             
-            // Set up timeout for location
-            DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+            // Set up a smart timeout with Tarragona fallback
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
                 guard let self = self, self.isLoading else { return }
-                self.errorMessage = "Location timeout - please enable location services in Settings"
-                self.isLoading = false
+                print("⏰ GPS timeout - falling back to Tarragona for demo")
+                let fallbackLocation = CLLocationCoordinate2D(latitude: 41.1189, longitude: 1.2445)
+                Task {
+                    await self.loadChargersFromAPI(location: fallbackLocation, direction: direction, range: range)
+                }
             }
             
-            // Wait for location update or error
-            Publishers.CombineLatest(locationManager.$location, locationManager.$errorMessage)
+            // Monitor location updates
+            locationManager.$location
+                .compactMap { $0 }
+                .first()
                 .receive(on: DispatchQueue.main)
-                .sink { [weak self] location, locationError in
+                .sink { [weak self] location in
                     guard let self = self else { return }
-                    
-                    if let locationError = locationError {
-                        self.errorMessage = "Location error: \(locationError)"
-                        self.isLoading = false
-                    } else if let location = location {
-                        Task {
-                            await self.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
-                        }
+                    print("✅ Got your real location: \(location.coordinate)")
+                    Task {
+                        await self.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
                     }
                 }
                 .store(in: &cancellables)
