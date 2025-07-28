@@ -23,13 +23,11 @@ class RealChargerService: ChargerServiceProtocol {
             }
         } else {
             // Get current location from GPS for real-world usage
-            print("🌍 Requesting your actual GPS location...")
             locationManager.requestLocation()
             
             // Set up a smart timeout with Tarragona fallback
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
                 guard let self = self, self.isLoading else { return }
-                print("⏰ GPS timeout - falling back to Tarragona for demo")
                 let fallbackLocation = CLLocationCoordinate2D(latitude: 41.1189, longitude: 1.2445)
                 Task {
                     await self.loadChargersFromAPI(location: fallbackLocation, direction: direction, range: range)
@@ -43,7 +41,6 @@ class RealChargerService: ChargerServiceProtocol {
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] location in
                     guard let self = self else { return }
-                    print("✅ Got your real location: \(location.coordinate)")
                     Task {
                         await self.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
                     }
@@ -55,15 +52,10 @@ class RealChargerService: ChargerServiceProtocol {
     @MainActor
     private func loadChargersFromAPI(location: CLLocationCoordinate2D, direction: TravelDirection, range: RemainingRange) async {
         do {
-            print("🚀 Starting API call for location: \(location.latitude), \(location.longitude)")
-            print("📍 Direction: \(direction), Range: \(range.rawValue)km")
-            
             // Add timeout for API call
             let apiChargers = try await withTimeout(seconds: 10) { [self] in
                 try await self.openChargeMapService.fetchChargers(near: location, radius: range.rawValue)
             }
-            
-            print("🔌 Received \(apiChargers.count) chargers from API")
             
             // 2. Filter for direction and accessibility
             let filteredChargers = apiChargers.filter { charger in
@@ -89,28 +81,15 @@ class RealChargerService: ChargerServiceProtocol {
             
             // If no chargers found, fallback to mock data
             if self.chargerResults.isEmpty {
-                print("No real chargers found, falling back to mock data")
                 await loadMockData(direction: direction, range: range, location: location)
             } else {
                 self.isLoading = false
             }
             
         } catch {
-            print("API Error: \(error.localizedDescription)")
-            self.errorMessage = "API failed, showing mock data: \(error.localizedDescription)"
-            // Fallback to mock data on any error
+            // Keep essential error logging for production troubleshooting
+            self.errorMessage = "Unable to find chargers in this area"
             await loadMockData(direction: direction, range: range, location: location)
-        }
-    }
-    
-    // Test method to verify API connectivity
-    func testAPIConnectivity() async -> String {
-        let testLocation = CLLocationCoordinate2D(latitude: 51.9225, longitude: 4.4792)
-        do {
-            let chargers = try await openChargeMapService.fetchChargers(near: testLocation, radius: 10)
-            return "✅ API Success: Found \(chargers.count) chargers"
-        } catch {
-            return "❌ API Failed: \(error.localizedDescription)"
         }
     }
     
@@ -290,39 +269,23 @@ struct OpenChargeMapService {
         }
         
         do {
-            print("🌐 Making API call to: \(url)")
             let (data, response) = try await URLSession.shared.data(from: url)
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("❌ Invalid HTTP response")
                 throw APIError.invalidResponse
             }
             
-            print("📡 API Response Status: \(httpResponse.statusCode)")
-            
             guard httpResponse.statusCode == 200 else {
-                print("❌ HTTP Error: \(httpResponse.statusCode)")
-                if let errorData = String(data: data, encoding: .utf8) {
-                    print("Error details: \(errorData)")
-                }
                 throw APIError.httpError(httpResponse.statusCode)
             }
             
-            let responseString = String(data: data, encoding: .utf8) ?? "Unable to decode response"
-            print("📋 Raw API Response (first 500 chars): \(String(responseString.prefix(500)))")
-            
             let openChargeMapResponse = try JSONDecoder().decode([OpenChargeMapPOI].self, from: data)
-            print("✅ Successfully decoded \(openChargeMapResponse.count) POIs from API")
-            
             let chargers = openChargeMapResponse.compactMap { convertToCharger($0) }
-            print("🔌 Converted to \(chargers.count) chargers")
             
             return chargers
             
         } catch {
-            print("❌ API Error: \(error)")
             // Fallback to enhanced mock data for development
-            print("🔄 Falling back to mock data")
             return generateRouteBasedMockData(userLocation: location, direction: .rotterdamToSantaPola)
         }
     }
