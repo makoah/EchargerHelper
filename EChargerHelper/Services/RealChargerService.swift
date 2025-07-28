@@ -12,6 +12,12 @@ class RealChargerService: ChargerServiceProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var userPreferences = UserPreferences()
     
+    deinit {
+        // Clean up resources to prevent memory leaks
+        locationManager.stopUpdatingLocation()
+        cancellables.removeAll()
+    }
+    
     func fetchChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D? = nil) {
         isLoading = true
         errorMessage = nil
@@ -65,7 +71,9 @@ class RealChargerService: ChargerServiceProtocol {
             }
             
             // 3. Convert to ChargerResults with real distance calculations
-            self.chargerResults = filteredChargers.map { charger in
+            // Limit results for iPhone memory optimization (max 20 chargers)
+            let limitedChargers = Array(filteredChargers.prefix(20))
+            self.chargerResults = limitedChargers.map { charger in
                 let distance = DirectionUtils.calculateDistance(from: location, to: charger.location)
                 let timeToCharger = DirectionUtils.calculateTimeToCharger(distance: distance)
                 
