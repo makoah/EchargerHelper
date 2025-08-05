@@ -29,25 +29,25 @@ Generated from requirements: Clean up debug elements, remove test UI, and prepar
   - [x] 1.4 Update loading messages to be professional and user-friendly
   - [x] 1.5 Remove testAPIConnectivity method from RealChargerService
   - [x] 1.6 Simplify error display to show only essential user information
-- [ ] 2.0 Remove Debug Logging and Console Output
+- [x] 2.0 Remove Debug Logging and Console Output
   - [x] 2.1 Remove print statements from RealChargerService API calls
-  - [ ] 2.2 Remove debug logging from LocationManager delegate methods
-  - [ ] 2.3 Clean up API debug logging in OpenChargeMapService fetchChargers method
-  - [ ] 2.4 Remove console output from loadChargersFromAPI method
-  - [ ] 2.5 Keep only essential error logging for production troubleshooting
-  - [ ] 2.6 Remove raw API response logging that could expose sensitive data
-- [ ] 3.0 Optimize for iPhone 12 Pro Performance
-  - [ ] 3.1 Verify Info.plist location permissions are properly configured for device
-  - [ ] 3.2 Set minimum deployment target to iOS 14.1 for iPhone 12 Pro compatibility
-  - [ ] 3.3 Configure build settings for iPhone 12 Pro architecture (arm64)
-  - [ ] 3.4 Optimize UI layout for iPhone 12 Pro screen dimensions (390x844 points)
-  - [ ] 3.5 Test memory usage and optimize for device constraints
-  - [ ] 3.6 Configure proper signing and provisioning for device deployment
-- [ ] 4.0 Prepare for iPhone 12 Pro Testing
-  - [ ] 4.1 Create step-by-step iPhone 12 Pro build and install instructions
-  - [ ] 4.2 Document GPS testing procedures specific to iPhone 12 Pro
-  - [ ] 4.3 Create Barcelona area testing checklist with specific locations
-  - [ ] 4.4 Verify OpenChargeMap API rate limits and usage with device location
-  - [ ] 4.5 Test battery usage during continuous location tracking
-  - [ ] 4.6 Create troubleshooting guide for common iPhone 12 Pro issues
-  - [ ] 4.7 Document how to test highway-side filtering on actual AP-7 route
+  - [x] 2.2 Remove debug logging from LocationManager delegate methods
+  - [x] 2.3 Clean up API debug logging in OpenChargeMapService fetchChargers method
+  - [x] 2.4 Remove console output from loadChargersFromAPI method
+  - [x] 2.5 Keep only essential error logging for production troubleshooting
+  - [x] 2.6 Remove raw API response logging that could expose sensitive data
+- [x] 3.0 Optimize for iPhone 12 Pro Performance
+  - [x] 3.1 Verify Info.plist location permissions are properly configured for device
+  - [x] 3.2 Set minimum deployment target to iOS 15.0 for iPhone 12 Pro compatibility with iOS 18.5
+  - [x] 3.3 Configure build settings for iPhone 12 Pro architecture (arm64)
+  - [x] 3.4 Optimize UI layout for iPhone 12 Pro screen dimensions (390x844 points)
+  - [x] 3.5 Test memory usage and optimize for device constraints
+  - [x] 3.6 Configure proper signing and provisioning for device deployment
+- [x] 4.0 Prepare for iPhone 12 Pro Testing
+  - [x] 4.1 Create step-by-step iPhone 12 Pro build and install instructions
+  - [x] 4.2 Document GPS testing procedures specific to iPhone 12 Pro
+  - [x] 4.3 Create Barcelona area testing checklist with specific locations
+  - [x] 4.4 Verify OpenChargeMap API rate limits and usage with device location
+  - [x] 4.5 Test battery usage during continuous location tracking
+  - [x] 4.6 Create troubleshooting guide for common iPhone 12 Pro issues
+  - [x] 4.7 Document how to test highway-side filtering on actual AP-7 route

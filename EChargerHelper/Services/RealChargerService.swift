@@ -12,6 +12,10 @@ class RealChargerService: ChargerServiceProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var userPreferences = UserPreferences()
     
+    // API rate limiting
+    private var lastAPICallTime: Date = Date.distantPast
+    private let minimumAPIInterval: TimeInterval = 10.0 // 10 seconds between API calls
+    
     deinit {
         // Clean up resources to prevent memory leaks
         locationManager.stopUpdatingLocation()
@@ -58,6 +62,17 @@ class RealChargerService: ChargerServiceProtocol {
     @MainActor
     private func loadChargersFromAPI(location: CLLocationCoordinate2D, direction: TravelDirection, range: RemainingRange) async {
         do {
+            // Rate limiting check
+            let timeSinceLastCall = Date().timeIntervalSince(lastAPICallTime)
+            if timeSinceLastCall < minimumAPIInterval {
+                // Use mock data instead of API call to respect rate limits
+                await loadMockData(direction: direction, range: range, location: location)
+                return
+            }
+            
+            // Update last API call time
+            lastAPICallTime = Date()
+            
             // Add timeout for API call
             let apiChargers = try await withTimeout(seconds: 10) { [self] in
                 try await self.openChargeMapService.fetchChargers(near: location, radius: range.rawValue)

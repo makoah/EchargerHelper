@@ -12,7 +12,17 @@ class LocationManager: NSObject, ObservableObject {
     override init() {
         super.init()
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        // Optimize for battery life on iPhone 12 Pro
+        if ProcessInfo.processInfo.isLowPowerModeEnabled {
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        } else {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        }
+        
+        // Reduce power consumption
+        locationManager.distanceFilter = 100 // Only update if moved 100m
+        
         locationManager.requestWhenInUseAuthorization()
     }
     
