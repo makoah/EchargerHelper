@@ -160,7 +160,7 @@ struct ChargerRowView: View {
     }
     
     private var statusColor: Color {
-        return chargerResult.charger.availability.color
+        return chargerResult.charger.availability.colorValue
     }
 }
 

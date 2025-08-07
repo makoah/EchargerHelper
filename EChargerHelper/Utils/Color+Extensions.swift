@@ -54,7 +54,7 @@ extension Color {
 
 // MARK: - Charger Status Color Helper
 extension ChargerAvailabilityStatus {
-    var color: Color {
+    var colorValue: Color {
         switch self {
         case .available:
             return .statusAvailable
