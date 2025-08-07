@@ -21,10 +21,7 @@ class RealChargerService: ChargerServiceProtocol {
         locationManager.stopUpdatingLocation()
         cancellables.removeAll()
         
-        // Set loading state to false directly since we're on deinit
-        DispatchQueue.main.async { [weak self] in
-            self?.isLoading = false
-        }
+        // isLoading will be automatically deallocated with self
     }
     
     func fetchChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D? = nil) {
@@ -653,37 +650,8 @@ extension Array {
     }
 }
 
-// MARK: - Edge Case Testing
+// MARK: - Error Handling
 extension RealChargerService {
-    /// Test method to validate edge case handling
-    private func testEdgeCases() {
-        // Test empty arrays with safe methods
-        let emptyIntArray: [Int] = []
-        _ = emptyIntArray.safeRandomElement() // Should return nil
-        _ = emptyIntArray.safeRandomElement(default: 42) // Should return 42
-        
-        // Test arrays that might be empty during random selection
-        let powerRatings = [150, 175, 300, 350]
-        _ = powerRatings.safeRandomElement(default: 150)
-        
-        let availability = [ChargerAvailabilityStatus.available, .occupied, .unknown]
-        _ = availability.safeRandomElement(default: .available)
-        
-        // Test URL creation edge cases
-        _ = URL(string: "https://echargerhelper.com/privacy")
-        _ = URL(string: "") // Should return nil
-        
-        // Test coordinate bounds
-        _ = CLLocationCoordinate2D(latitude: 41.3851, longitude: 2.1734)
-        _ = CLLocationCoordinate2D(latitude: 999, longitude: 2.1734)
-        
-        // Test empty operators array
-        let operators: [String] = []
-        _ = operators.safeRandomElement(default: "DefaultOperator")
-        
-        print("Edge case testing completed - all safe methods handle nil gracefully")
-    }
-    
     /// Converts API and service errors into user-friendly messages
     private func getUserFriendlyAPIError(_ error: Error) -> String {
         if let urlError = error as? URLError {
