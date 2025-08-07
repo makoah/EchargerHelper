@@ -104,27 +104,31 @@ struct SettingsView: View {
                 }
                 
                 Section {
-                    Link(destination: URL(string: "mailto:support@echargerhelper.com")!) {
-                        HStack {
-                            Image(systemName: "envelope")
-                                .foregroundColor(.blue)
-                            Text("Contact Support")
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                    if let supportURL = URL(string: "mailto:support@echargerhelper.com") {
+                        Link(destination: supportURL) {
+                            HStack {
+                                Image(systemName: "envelope")
+                                    .foregroundColor(.blue)
+                                Text("Contact Support")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                     
-                    Link(destination: URL(string: "https://echargerhelper.com/privacy")!) {
-                        HStack {
-                            Image(systemName: "hand.raised")
-                                .foregroundColor(.blue)
-                            Text("Privacy Policy")
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                    if let privacyURL = URL(string: "https://echargerhelper.com/privacy") {
+                        Link(destination: privacyURL) {
+                            HStack {
+                                Image(systemName: "hand.raised")
+                                    .foregroundColor(.blue)
+                                Text("Privacy Policy")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                 } header: {

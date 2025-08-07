@@ -6,6 +6,7 @@ struct ContentView: View {
     @State private var showChargerList = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
+    @State private var showSettings = false
     
     private var isReadyToSearch: Bool {
         selectedDirection != nil && selectedRange != nil
@@ -118,11 +119,29 @@ struct ContentView: View {
             }
             .navigationTitle("ECharger Helper")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
         }
         .sheet(isPresented: $showChargerList) {
             if let direction = selectedDirection, let range = selectedRange {
                 SimpleChargerListView(direction: direction, range: range)
             }
+        }
+        .onChange(of: showChargerList) { isPresented in
+            // Ensure location services are stopped when charger list is dismissed
+            if !isPresented {
+                // Location services will be stopped by SimpleChargerListView.onDisappear
+            }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
         }
         .alert("Input Required", isPresented: $showingAlert) {
             Button("OK") { }

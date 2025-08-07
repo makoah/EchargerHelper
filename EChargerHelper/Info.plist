@@ -6,5 +6,7 @@
 	<string>ECharger Helper needs your location to find nearby chargers on your route and determine your position along the Rotterdam-Santa Pola corridor.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>ECharger Helper needs your location to find nearby chargers on your route and determine your position along the Rotterdam-Santa Pola corridor.</string>
+	<key>OpenChargeMapAPIKey</key>
+	<string>cff5c9bb-2278-4f6f-84ef-177eb6011238</string>
 </dict>
 </plist>

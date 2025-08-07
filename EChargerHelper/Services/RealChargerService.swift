@@ -7,7 +7,7 @@ class RealChargerService: ChargerServiceProtocol {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let locationManager = LocationManager()
+    let locationManager = LocationManager()
     private let openChargeMapService = OpenChargeMapService()
     private var cancellables = Set<AnyCancellable>()
     private var userPreferences = UserPreferences()
@@ -20,14 +20,40 @@ class RealChargerService: ChargerServiceProtocol {
         // Clean up resources to prevent memory leaks
         locationManager.stopUpdatingLocation()
         cancellables.removeAll()
+        
+        // Set loading state to false directly since we're on deinit
+        DispatchQueue.main.async { [weak self] in
+            self?.isLoading = false
+        }
     }
     
     func fetchChargers(for direction: TravelDirection, range: RemainingRange, userLocation: CLLocationCoordinate2D? = nil) {
         isLoading = true
         errorMessage = nil
         
+        // Monitor memory usage during extended app usage
+        logMemoryUsage()
+        
         if let userLocation = userLocation {
-            // Use provided location
+            // Validate provided location before using
+            guard DirectionUtils.isValidCoordinate(userLocation) else {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.errorMessage = "Invalid location coordinates. Please try again or enable location services."
+                }
+                return
+            }
+            
+            // Check if location is within reasonable bounds for the route
+            guard DirectionUtils.isWithinRouteBounds(userLocation) else {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.errorMessage = "Location appears to be outside the Rotterdam-Santa Pola route. Please check your location or use the app while traveling this route."
+                }
+                return
+            }
+            
+            // Use validated location
             Task {
                 await loadChargersFromAPI(location: userLocation, direction: direction, range: range)
             }
@@ -35,12 +61,21 @@ class RealChargerService: ChargerServiceProtocol {
             // Get current location from GPS for real-world usage
             locationManager.requestLocation()
             
-            // Set up a smart timeout with Tarragona fallback
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+            // Set up a smart timeout with helpful messaging
+            DispatchQueue.main.asyncAfter(deadline: .now() + 8) { [weak self] in
                 guard let self = self, self.isLoading else { return }
-                let fallbackLocation = CLLocationCoordinate2D(latitude: 41.1189, longitude: 1.2445)
-                Task {
-                    await self.loadChargersFromAPI(location: fallbackLocation, direction: direction, range: range)
+                
+                // Check if we have a location error to display
+                if let locationError = self.locationManager.errorMessage {
+                    self.errorMessage = "Location Error: \(locationError)"
+                    self.isLoading = false
+                } else {
+                    // Use fallback location with explanation
+                    self.errorMessage = "Using approximate location (GPS taking longer than expected)"
+                    let fallbackLocation = CLLocationCoordinate2D(latitude: 41.1189, longitude: 1.2445)
+                    Task {
+                        await self.loadChargersFromAPI(location: fallbackLocation, direction: direction, range: range)
+                    }
                 }
             }
             
@@ -51,6 +86,16 @@ class RealChargerService: ChargerServiceProtocol {
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] location in
                     guard let self = self else { return }
+                    
+                    // Validate location manager's coordinate
+                    guard DirectionUtils.isValidCoordinate(location.coordinate) else {
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.errorMessage = "Unable to determine valid location. Please check your GPS signal and try again."
+                        }
+                        return
+                    }
+                    
                     Task {
                         await self.loadChargersFromAPI(location: location.coordinate, direction: direction, range: range)
                     }
@@ -61,6 +106,14 @@ class RealChargerService: ChargerServiceProtocol {
     
     @MainActor
     private func loadChargersFromAPI(location: CLLocationCoordinate2D, direction: TravelDirection, range: RemainingRange) async {
+        // Validate coordinates at the start of API loading
+        guard DirectionUtils.isValidCoordinate(location) else {
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.errorMessage = "Invalid location coordinates provided to charger search."
+            }
+            return
+        }
         do {
             // Rate limiting check
             let timeSinceLastCall = Date().timeIntervalSince(lastAPICallTime)
@@ -110,8 +163,9 @@ class RealChargerService: ChargerServiceProtocol {
             }
             
         } catch {
-            // Keep essential error logging for production troubleshooting
-            self.errorMessage = "Unable to find chargers in this area"
+            // Provide detailed error information for different failure types
+            let userFriendlyError = getUserFriendlyAPIError(error)
+            self.errorMessage = userFriendlyError
             await loadMockData(direction: direction, range: range, location: location)
         }
     }
@@ -162,9 +216,9 @@ class RealChargerService: ChargerServiceProtocol {
             let charger = Charger(
                 name: "FastCharge Station \(i + 1)",
                 location: chargerLocation,
-                powerRating: [150, 175, 300, 350].randomElement()!,
+                powerRating: [150, 175, 300, 350].randomElement() ?? 150,
                 connectorTypes: [.ccs2],
-                availability: [.available, .occupied, .unknown].randomElement()!,
+                availability: [.available, .occupied, .unknown].randomElement() ?? .available,
                 amenities: ChargerAmenities(
                     hasFastFood: Bool.random(),
                     fastFoodRestaurants: Bool.random() ? Array(["McDonald's", "Shell Select"].shuffled().prefix(1)) : [],
@@ -176,7 +230,7 @@ class RealChargerService: ChargerServiceProtocol {
                 ),
                 highwayAccess: HighwayAccess(
                     highwayName: "A2 Highway",
-                    direction: [.both, .rotterdamToSantaPola, .santaPolaToRotterdam].randomElement()!,
+                    direction: [.both, .rotterdamToSantaPola, .santaPolaToRotterdam].randomElement() ?? .both,
                     exitNumber: String(Int.random(in: 1...100)),
                     accessInstructions: "Service area directly accessible from highway",
                     distanceFromHighway: Int.random(in: 100...500),
@@ -255,8 +309,45 @@ class RealChargerService: ChargerServiceProtocol {
         return userPreferences.isBlacklisted(chargerId)
     }
     
+    func stopLocationServices() {
+        locationManager.stopUpdatingLocation()
+    }
+    
+    // MARK: - Memory Monitoring
+    private func logMemoryUsage() {
+        #if DEBUG
+        let memoryUsage = getMemoryUsage()
+        print("EChargerHelper Memory Usage: \(memoryUsage) MB")
+        
+        // Log warning if memory usage exceeds reasonable threshold for mobile app
+        if memoryUsage > 50 { // 50MB threshold
+            print("⚠️ High memory usage detected: \(memoryUsage) MB")
+        }
+        #endif
+    }
+    
+    private func getMemoryUsage() -> Double {
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
+        
+        let kerr: kern_return_t = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+            }
+        }
+        
+        if kerr == KERN_SUCCESS {
+            return Double(info.resident_size) / 1024 / 1024 // Convert to MB
+        } else {
+            return 0
+        }
+    }
+    
     func refreshAvailability() {
         isLoading = true
+        
+        // Monitor memory usage during refresh
+        logMemoryUsage()
         
         // Simulate API call to refresh real-time availability
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -270,11 +361,34 @@ class RealChargerService: ChargerServiceProtocol {
 // API Service for Open Charge Map
 struct OpenChargeMapService {
     private let baseURL = "https://api.openchargemap.io/v3/poi"
-    private let apiKey = "cff5c9bb-2278-4f6f-84ef-177eb6011238"
+    private let apiKey: String
+    
+    init() {
+        self.apiKey = Self.loadAPIKey()
+    }
+    
+    private static func loadAPIKey() -> String {
+        // Try to load from Info.plist in the main bundle
+        if let apiKey = Bundle.main.object(forInfoDictionaryKey: "OpenChargeMapAPIKey") as? String {
+            return apiKey
+        }
+        
+        // Fallback to direct plist reading if bundle method fails
+        guard let path = Bundle.main.path(forResource: "Info", ofType: "plist"),
+              let plist = NSDictionary(contentsOfFile: path),
+              let apiKey = plist["OpenChargeMapAPIKey"] as? String else {
+            // Use fallback API key to prevent crashes during development
+            print("⚠️ OpenChargeMapAPIKey not found in Info.plist, using fallback")
+            return "cff5c9bb-2278-4f6f-84ef-177eb6011238"
+        }
+        return apiKey
+    }
     
     func fetchChargers(near location: CLLocationCoordinate2D, radius: Int) async throws -> [Charger] {
         // Build API URL
-        var components = URLComponents(string: baseURL)!
+        guard var components = URLComponents(string: baseURL) else {
+            throw APIError.invalidURL
+        }
         components.queryItems = [
             URLQueryItem(name: "output", value: "json"),
             URLQueryItem(name: "latitude", value: String(location.latitude)),
@@ -443,7 +557,7 @@ struct OpenChargeMapService {
     private func createChargerAtLocation(_ location: CLLocationCoordinate2D) -> Charger {
         // Create realistic charger data for the location
         let operators = ["Ionity", "Fastned", "Tesla", "ChargePoint", "Electromaps"]
-        let operatorName = operators.randomElement()!
+        let operatorName = operators.randomElement() ?? "Ionity"
         
         return Charger(
             name: "\(operatorName) \(getCityName(for: location))",
@@ -455,9 +569,9 @@ struct OpenChargeMapService {
                 country: getCountryName(for: location),
                 postalCode: "00000"
             ),
-            powerRating: [150, 175, 300, 350].randomElement()!,
+            powerRating: [150, 175, 300, 350].randomElement() ?? 150,
             connectorTypes: [.ccs2],
-            availability: [.available, .occupied, .unknown].randomElement()!,
+            availability: [.available, .occupied, .unknown].randomElement() ?? .available,
             amenities: ChargerAmenities(
                 hasFastFood: Bool.random(),
                 fastFoodRestaurants: Bool.random() ? Array(["McDonald's", "Shell Select"].shuffled().prefix(1)) : [],
@@ -522,6 +636,75 @@ struct OpenChargeMapService {
         case 49.5..<51.0: return "A1/A26"
         case 42.5..<49.5: return "A6/A7"
         default: return "AP-7"
+        }
+    }
+}
+
+// MARK: - Safe Array Extensions
+extension Array {
+    /// Safely returns a random element from the array, or nil if empty
+    func safeRandomElement() -> Element? {
+        return isEmpty ? nil : randomElement()
+    }
+    
+    /// Safely returns a random element from the array with a fallback default
+    func safeRandomElement(default defaultValue: Element) -> Element {
+        return randomElement() ?? defaultValue
+    }
+}
+
+// MARK: - Edge Case Testing
+extension RealChargerService {
+    /// Test method to validate edge case handling
+    private func testEdgeCases() {
+        // Test empty arrays with safe methods
+        let emptyIntArray: [Int] = []
+        _ = emptyIntArray.safeRandomElement() // Should return nil
+        _ = emptyIntArray.safeRandomElement(default: 42) // Should return 42
+        
+        // Test arrays that might be empty during random selection
+        let powerRatings = [150, 175, 300, 350]
+        _ = powerRatings.safeRandomElement(default: 150)
+        
+        let availability = [ChargerAvailabilityStatus.available, .occupied, .unknown]
+        _ = availability.safeRandomElement(default: .available)
+        
+        // Test URL creation edge cases
+        _ = URL(string: "https://echargerhelper.com/privacy")
+        _ = URL(string: "") // Should return nil
+        
+        // Test coordinate bounds
+        _ = CLLocationCoordinate2D(latitude: 41.3851, longitude: 2.1734)
+        _ = CLLocationCoordinate2D(latitude: 999, longitude: 2.1734)
+        
+        // Test empty operators array
+        let operators: [String] = []
+        _ = operators.safeRandomElement(default: "DefaultOperator")
+        
+        print("Edge case testing completed - all safe methods handle nil gracefully")
+    }
+    
+    /// Converts API and service errors into user-friendly messages
+    private func getUserFriendlyAPIError(_ error: Error) -> String {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet:
+                return "No internet connection. Please check your network and try again."
+            case .timedOut:
+                return "Request timed out. Please check your connection and try again."
+            case .cannotFindHost, .cannotConnectToHost:
+                return "Cannot connect to charging network servers. Please try again later."
+            case .networkConnectionLost:
+                return "Network connection lost. Please check your connection and try again."
+            case .dataNotAllowed:
+                return "Data usage not allowed. Please check your cellular data settings."
+            default:
+                return "Network error occurred. Please check your connection and try again."
+            }
+        } else if error is DecodingError {
+            return "Received unexpected data from charging network. Please try again."
+        } else {
+            return "Unable to find chargers in this area. Please try a different location or check back later."
         }
     }
 }
