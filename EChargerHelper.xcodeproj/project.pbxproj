@@ -23,6 +23,7 @@
 		AA000053 /* ChargerServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000052 /* ChargerServiceProtocol.swift */; };
 		AA000055 /* SimpleChargerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000054 /* SimpleChargerListView.swift */; };
 		AA000057 /* LocationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000056 /* LocationPermissionView.swift */; };
+		AA000059 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000058 /* Color+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		AA000052 /* ChargerServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargerServiceProtocol.swift; sourceTree = "<group>"; };
 		AA000054 /* SimpleChargerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleChargerListView.swift; sourceTree = "<group>"; };
 		AA000056 /* LocationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionView.swift; sourceTree = "<group>"; };
+		AA000058 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 			children = (
 				AA000036 /* DirectionUtils.swift */,
 				AA000038 /* DistanceUtils.swift */,
+				AA000058 /* Color+Extensions.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				AA000053 /* ChargerServiceProtocol.swift in Sources */,
 				AA000055 /* SimpleChargerListView.swift in Sources */,
 				AA000057 /* LocationPermissionView.swift in Sources */,
+				AA000059 /* Color+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -56,7 +56,7 @@ struct ChargerRowView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "bolt.fill")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.powerYellow)
                     Text("\(chargerResult.charger.powerRating) kW")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -67,10 +67,10 @@ struct ChargerRowView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "battery.25")
                             .font(.caption)
-                            .foregroundColor(chargerResult.isUrgent ? .red : .orange)
+                            .foregroundColor(chargerResult.isUrgent ? .errorRed : .powerYellow)
                         Text("\(chargerResult.estimatedArrivalRange)km left")
                             .font(.caption)
-                            .foregroundColor(chargerResult.isUrgent ? .red : .orange)
+                            .foregroundColor(chargerResult.isUrgent ? .errorRed : .powerYellow)
                     }
                 }
             }
@@ -82,15 +82,15 @@ struct ChargerRowView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "fork.knife")
                                 .font(.caption)
-                                .foregroundColor(.green)
+                                .foregroundColor(.successGreen)
                             if !chargerResult.charger.amenities.fastFoodRestaurants.isEmpty {
                                 Text(chargerResult.charger.amenities.fastFoodRestaurants.first ?? "Food")
                                     .font(.caption)
-                                    .foregroundColor(.green)
+                                    .foregroundColor(.successGreen)
                             } else {
                                 Text("Restaurant")
                                     .font(.caption)
-                                    .foregroundColor(.green)
+                                    .foregroundColor(.successGreen)
                             }
                         }
                     }
@@ -99,10 +99,10 @@ struct ChargerRowView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "toilet")
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.secondaryBlue)
                             Text("Restrooms")
                                 .font(.caption)
-                                .foregroundColor(.blue)
+                                .foregroundColor(.secondaryBlue)
                         }
                     }
                     
@@ -139,13 +139,13 @@ struct ChargerRowView: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.mini)
-                .tint(.red)
+                .tint(.errorRed)
                 
                 if let rating = chargerResult.charger.userRating {
                     HStack(spacing: 2) {
                         Image(systemName: "star.fill")
                             .font(.caption)
-                            .foregroundColor(.yellow)
+                            .foregroundColor(.powerYellow)
                         Text(String(format: "%.1f", rating))
                             .font(.caption)
                             .foregroundColor(.secondary)
@@ -160,16 +160,7 @@ struct ChargerRowView: View {
     }
     
     private var statusColor: Color {
-        switch chargerResult.charger.availability {
-        case .available:
-            return .green
-        case .occupied:
-            return .orange
-        case .outOfOrder:
-            return .red
-        case .unknown:
-            return .gray
-        }
+        return chargerResult.charger.availability.color
     }
 }
 
@@ -290,7 +281,7 @@ struct AmenityRow: View {
         HStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundColor(.green)
+                .foregroundColor(.successGreen)
                 .frame(width: 16)
             
             VStack(alignment: .leading, spacing: 2) {

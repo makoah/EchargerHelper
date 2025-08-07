@@ -33,7 +33,7 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(selectedDirection == .rotterdamToSantaPola ? Color.blue : Color.gray.opacity(0.2))
+                        .background(selectedDirection == .rotterdamToSantaPola ? Color.secondaryBlue : Color.gray.opacity(0.2))
                         .foregroundColor(selectedDirection == .rotterdamToSantaPola ? .white : .primary)
                         .cornerRadius(10)
                     }
@@ -47,7 +47,7 @@ struct ContentView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(selectedDirection == .santaPolaToRotterdam ? Color.blue : Color.gray.opacity(0.2))
+                        .background(selectedDirection == .santaPolaToRotterdam ? Color.secondaryBlue : Color.gray.opacity(0.2))
                         .foregroundColor(selectedDirection == .santaPolaToRotterdam ? .white : .primary)
                         .cornerRadius(10)
                     }
@@ -73,7 +73,7 @@ struct ContentView: View {
                                 }
                                 .frame(height: 80)
                                 .frame(maxWidth: .infinity)
-                                .background(selectedRange == range ? Color.green : Color.gray.opacity(0.2))
+                                .background(selectedRange == range ? Color.secondaryBlue : Color.gray.opacity(0.2))
                                 .foregroundColor(selectedRange == range ? .white : .primary)
                                 .cornerRadius(10)
                             }
@@ -93,7 +93,7 @@ struct ContentView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(isReadyToSearch ? Color.blue : Color.gray)
+                        .background(isReadyToSearch ? Color.primaryBlue : Color.gray)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
@@ -104,14 +104,14 @@ struct ContentView: View {
                 if selectedDirection != nil && selectedRange == nil {
                     Text("Please select your remaining range")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.warningOrange)
                         .padding(.top, -20)
                 }
                 
                 if selectedDirection == nil {
                     Text("Please select your travel direction first")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.warningOrange)
                         .padding(.top, -20)
                 }
                 

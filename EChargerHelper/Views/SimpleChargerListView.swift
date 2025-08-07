@@ -33,7 +33,7 @@ struct SimpleChargerListView: View {
                     VStack(spacing: 16) {
                         Image(systemName: "location.slash")
                             .font(.system(size: 48))
-                            .foregroundColor(.orange)
+                            .foregroundColor(.warningOrange)
                             .padding()
                         
                         Text("Location Access Needed")
@@ -55,7 +55,7 @@ struct SimpleChargerListView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color.primaryBlue)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                         }
@@ -81,14 +81,14 @@ struct SimpleChargerListView: View {
                         VStack(spacing: 8) {
                             HStack {
                                 Image(systemName: "arrow.right")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.secondaryBlue)
                                 Text(direction == .rotterdamToSantaPola ? "Rotterdam → Santa Pola" : "Santa Pola → Rotterdam")
                                     .font(.subheadline)
                             }
                             
                             HStack {
                                 Image(systemName: "battery.25")
-                                    .foregroundColor(.orange)
+                                    .foregroundColor(.powerYellow)
                                 Text("\(range.rawValue) km range")
                                     .font(.subheadline)
                             }

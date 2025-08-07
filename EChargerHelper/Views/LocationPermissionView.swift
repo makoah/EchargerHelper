@@ -12,7 +12,7 @@ struct LocationPermissionView: View {
                 VStack(spacing: 12) {
                     Image(systemName: "location.circle")
                         .font(.system(size: 60))
-                        .foregroundColor(.blue)
+                        .foregroundColor(.primaryBlue)
                     
                     Text("Location Permission")
                         .font(.title)
@@ -40,7 +40,7 @@ struct LocationPermissionView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color.primaryBlue)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                         }
@@ -55,7 +55,7 @@ struct LocationPermissionView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(Color.primaryBlue)
                             .foregroundColor(.white)
                             .cornerRadius(10)
                         }
@@ -133,13 +133,13 @@ struct StatusCard: View {
     private var iconInfo: (String, Color) {
         switch authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
-            return ("checkmark.circle.fill", .green)
+            return ("checkmark.circle.fill", .successGreen)
         case .denied:
-            return ("xmark.circle.fill", .red)
+            return ("xmark.circle.fill", .errorRed)
         case .restricted:
-            return ("exclamationmark.triangle.fill", .orange)
+            return ("exclamationmark.triangle.fill", .warningOrange)
         case .notDetermined:
-            return ("questionmark.circle.fill", .blue)
+            return ("questionmark.circle.fill", .primaryBlue)
         @unknown default:
             return ("questionmark.circle", .gray)
         }

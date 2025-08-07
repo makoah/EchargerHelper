@@ -13,7 +13,7 @@ struct SettingsView: View {
                 Section {
                     HStack {
                         Image(systemName: "bolt.car")
-                            .foregroundColor(.blue)
+                            .foregroundColor(.secondaryBlue)
                         VStack(alignment: .leading) {
                             Text("ECharger Helper")
                                 .font(.headline)
@@ -32,7 +32,7 @@ struct SettingsView: View {
                     if userPreferences.blacklistedChargers.isEmpty {
                         HStack {
                             Image(systemName: "checkmark.circle")
-                                .foregroundColor(.green)
+                                .foregroundColor(.successGreen)
                             Text("No incompatible chargers marked")
                                 .foregroundColor(.secondary)
                         }
@@ -51,9 +51,9 @@ struct SettingsView: View {
                         }) {
                             HStack {
                                 Image(systemName: "trash")
-                                    .foregroundColor(.red)
+                                    .foregroundColor(.errorRed)
                                 Text("Clear All")
-                                    .foregroundColor(.red)
+                                    .foregroundColor(.errorRed)
                             }
                         }
                     }
@@ -90,7 +90,7 @@ struct SettingsView: View {
                     
                     HStack {
                         Image(systemName: "bolt.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.powerYellow)
                         VStack(alignment: .leading) {
                             Text("Charger Type")
                             Text("Ultra-fast DC (150kW+)")
@@ -108,7 +108,7 @@ struct SettingsView: View {
                         Link(destination: supportURL) {
                             HStack {
                                 Image(systemName: "envelope")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.secondaryBlue)
                                 Text("Contact Support")
                                 Spacer()
                                 Image(systemName: "arrow.up.right")
@@ -122,7 +122,7 @@ struct SettingsView: View {
                         Link(destination: privacyURL) {
                             HStack {
                                 Image(systemName: "hand.raised")
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.secondaryBlue)
                                 Text("Privacy Policy")
                                 Spacer()
                                 Image(systemName: "arrow.up.right")
@@ -177,7 +177,7 @@ struct BlacklistedChargerRow: View {
             
             Button(action: onRemove) {
                 Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.red)
+                    .foregroundColor(.errorRed)
             }
             .buttonStyle(.plain)
         }
